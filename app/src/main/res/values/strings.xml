@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Zomato Search</string>
+    <string name="loading">Loading…</string>
+    <string name="search">Search</string>
+    <string name="submit">Submit</string>
+    <string name="enter">Enter here…</string>
+</resources>
