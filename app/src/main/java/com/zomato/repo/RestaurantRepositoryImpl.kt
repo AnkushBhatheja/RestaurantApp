@@ -32,6 +32,7 @@ class RestaurantRepositoryImpl @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+
     override fun markFavourite(restaurant: Restaurant): Single<Unit> {
         return restaurantDao.markFavourite(restaurant)
             .subscribeOn(Schedulers.io())

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zomato.R
 import com.zomato.ZomatoApplication
+import com.zomato.database.ListItem
 import com.zomato.databinding.FragmentRestaurantListBinding
 import com.zomato.model.Restaurant
 import com.zomato.model.RestaurantData
@@ -45,11 +46,11 @@ class RestaurantListFragment : BaseFragment<FragmentRestaurantListBinding, Resta
 
         val adapter =
             RestaurantAdapter(object :
-                ItemClickListener<RestaurantData> {
-                override fun onItemClick(item: RestaurantData) {
+                ItemClickListener<ListItem> {
+                override fun onItemClick(item: ListItem) {
                 }
 
-                override fun markFavourite(position: Int, item: RestaurantData) {
+                override fun markFavourite(position: Int, item: ListItem) {
                 }
             })
         mBinding.recycleView.adapter = adapter

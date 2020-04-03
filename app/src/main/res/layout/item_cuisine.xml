@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tvCuisine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_border"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        tools:text="@string/app_name" />
+</layout>

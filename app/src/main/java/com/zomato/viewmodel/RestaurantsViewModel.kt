@@ -3,12 +3,16 @@ package com.zomato.viewmodel
 import androidx.lifecycle.MutableLiveData
 import com.zomato.R
 import com.zomato.ZomatoApplication
+import com.zomato.database.ListItem
+import com.zomato.model.Cuisine
 import com.zomato.model.Restaurant
 import com.zomato.model.RestaurantData
 import com.zomato.repo.RestaurantRepository
+import io.reactivex.Scheduler
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -25,8 +29,8 @@ class RestaurantsViewModel
         MutableLiveData<String?>("")
     }
 
-    val restaurantsLiveData: MutableLiveData<List<RestaurantData>> by lazy {
-        MutableLiveData<List<RestaurantData>>()
+    val restaurantsLiveData: MutableLiveData<List<ListItem>> by lazy {
+        MutableLiveData<List<ListItem>>()
     }
 
 
@@ -36,10 +40,14 @@ class RestaurantsViewModel
 
     private fun fetchRestaurants(query: String?) {
         repository.fetchRestaurants(query)
-            .subscribe(object : SingleObserver<List<RestaurantData>> {
-                override fun onSuccess(restaurants: List<RestaurantData>) {
+            .subscribeOn(Schedulers.io())
+            .map {
+                convertToList(groupByCuisine(it))
+            }
+            .subscribe(object : SingleObserver<List<ListItem>> {
+                override fun onSuccess(data: List<ListItem>) {
                     mLoading.postValue(Pair(false, null))
-                    restaurantsLiveData.postValue(restaurants)
+                    restaurantsLiveData.postValue(data)
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -57,6 +65,32 @@ class RestaurantsViewModel
                 }
             })
 
+    }
+
+    private fun convertToList(map: Map<String, List<Restaurant>>): List<ListItem> {
+
+        val list = mutableListOf<ListItem>()
+        for (pair in map.entries) {
+            list.add(Cuisine(pair.key))
+            for (restaurants in pair.value)
+                list.add(restaurants)
+        }
+        return list
+    }
+
+    private fun groupByCuisine(list: List<RestaurantData>): Map<String, List<Restaurant>> {
+        val map = HashMap<String, MutableList<Restaurant>>()
+        for (restaurant in list) {
+            val cuisine = restaurant.restaurant.cuisines
+            if (map.containsKey(cuisine)) {
+                map[cuisine]?.add(restaurant.restaurant)
+            } else {
+                map[cuisine] = mutableListOf<Restaurant>().apply {
+                    add(restaurant.restaurant)
+                }
+            }
+        }
+        return map
     }
 
 

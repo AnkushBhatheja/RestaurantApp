@@ -4,4 +4,5 @@
     <string name="search">Search</string>
     <string name="submit">Submit</string>
     <string name="enter">Enter here…</string>
+    <string name="price_per_person">%1$s%2$d for two</string>
 </resources>
