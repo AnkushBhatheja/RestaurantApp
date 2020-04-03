@@ -18,9 +18,8 @@ class RestaurantRepositoryImpl @Inject constructor(
 ) : RestaurantRepository {
 
     override fun fetchFavouriteRestaurants(): Single<List<Restaurant>> {
-        return Single.fromCallable {
-                restaurantDao.getFavouriteRestaurant()
-            }.subscribeOn(Schedulers.io())
+        return restaurantDao.getFavouriteRestaurant()
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
@@ -34,10 +33,8 @@ class RestaurantRepositoryImpl @Inject constructor(
     }
 
     override fun markFavourite(restaurant: Restaurant): Single<Unit> {
-        return Single.just(restaurant)
-            .map {
-                restaurantDao.markFavourite(restaurant)
-            }.subscribeOn(Schedulers.io())
+        return restaurantDao.markFavourite(restaurant)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
     }
