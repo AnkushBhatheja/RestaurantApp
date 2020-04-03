@@ -6,7 +6,7 @@ import com.zomato.database.Converters
 
 @Entity
 data class Restaurant(
-    @TypeConverter(Converters::class) val highlights: List<String>,
+//    @TypeConverter(Converters::class) val highlights: List<String>,
     @PrimaryKey val id: Long,
     val name: String,
     val cuisines: String,

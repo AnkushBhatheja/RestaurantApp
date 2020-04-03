@@ -9,7 +9,7 @@ import com.zomato.model.Restaurant
     entities = [Restaurant::class],
     version = 1
 )
-@TypeConverter(Converters::class)
+//@TypeConverter(Converters::class)
 abstract class Database : RoomDatabase() {
     abstract fun restaurantDao(): RestaurantDao
 }
