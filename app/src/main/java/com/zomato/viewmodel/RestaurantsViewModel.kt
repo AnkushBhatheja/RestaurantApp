@@ -4,17 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import com.zomato.R
 import com.zomato.ZomatoApplication
 import com.zomato.database.ListItem
-import com.zomato.model.Cuisine
 import com.zomato.model.Restaurant
 import com.zomato.model.RestaurantData
 import com.zomato.repo.RestaurantRepository
-import io.reactivex.Scheduler
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
+import java.util.function.Consumer
 import javax.inject.Inject
 
 class RestaurantsViewModel
@@ -39,7 +38,7 @@ class RestaurantsViewModel
     }
 
     private fun fetchRestaurants(query: String?) {
-        repository.fetchRestaurants(query)
+        repository.fetchAllRestaurants(query)
             .subscribeOn(Schedulers.io())
             .map {
                 convertToList(groupByCuisine(it))
@@ -67,40 +66,25 @@ class RestaurantsViewModel
 
     }
 
-    private fun convertToList(map: Map<String, List<Restaurant>>): List<ListItem> {
 
-        val list = mutableListOf<ListItem>()
-        for (pair in map.entries) {
-            list.add(Cuisine(pair.key))
-            for (restaurants in pair.value)
-                list.add(restaurants)
-        }
-        return list
-    }
-
-    private fun groupByCuisine(list: List<RestaurantData>): Map<String, List<Restaurant>> {
-        val map = HashMap<String, MutableList<Restaurant>>()
-        for (restaurant in list) {
-            val cuisine = restaurant.restaurant.cuisines
-            if (map.containsKey(cuisine)) {
-                map[cuisine]?.add(restaurant.restaurant)
-            } else {
-                map[cuisine] = mutableListOf<Restaurant>().apply {
-                    add(restaurant.restaurant)
-                }
-            }
-        }
-        return map
-    }
-
-
-    fun fetchRestaurants() {
+    fun getAllRestaurants() {
         addDisposable(publishSubject.debounce(500, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 fetchRestaurants(it)
             })
+    }
+
+
+    fun addToFavourite(restaurant: RestaurantData) {
+        repository.addToFavourite(restaurant)
+            .subscribe()
+    }
+
+    fun deleteFromFavourite(restaurant: RestaurantData) {
+        repository.deleteFromFavourite(restaurant)
+            .subscribe()
     }
 
 }

@@ -1,13 +1,16 @@
 package com.zomato.view.fragment
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zomato.R
 import com.zomato.ZomatoApplication
 import com.zomato.database.ListItem
-import com.zomato.databinding.FragmentRestaurantListBinding
+import com.zomato.databinding.FragmentRestaurantBinding
 import com.zomato.model.Restaurant
 import com.zomato.model.RestaurantData
 import com.zomato.view.ItemClickListener
@@ -19,13 +22,13 @@ import com.zomato.viewmodel.ViewModelFactory
 import javax.inject.Inject
 
 
-class RestaurantListFragment : BaseFragment<FragmentRestaurantListBinding, RestaurantsViewModel>() {
+class RestaurantListFragment : BaseFragment<FragmentRestaurantBinding, RestaurantsViewModel>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     override fun layoutId(): Int {
-        return R.layout.fragment_restaurant_list
+        return R.layout.fragment_restaurant
     }
 
     override fun inject() {
@@ -40,28 +43,27 @@ class RestaurantListFragment : BaseFragment<FragmentRestaurantListBinding, Resta
 
     override fun initView(savedInstanceState: Bundle?) {
 
-
         mBinding.viewModel = viewModel
-        mBinding.recycleView.layoutManager = LinearLayoutManager(context)
 
-        val adapter =
-            RestaurantAdapter(object :
-                ItemClickListener<ListItem> {
-                override fun onItemClick(item: ListItem) {
-                }
-
-                override fun markFavourite(position: Int, item: ListItem) {
+        val adapter = RestaurantAdapter(true,
+            object : ItemClickListener<ListItem> {
+                override fun markFavourite(item: ListItem, isFavourite: Boolean) {
+                    if (isFavourite) viewModel.addToFavourite(item as RestaurantData)
+                    else viewModel.deleteFromFavourite(item as RestaurantData)
                 }
             })
-        mBinding.recycleView.adapter = adapter
 
-        viewModel.fetchRestaurants()
 
+        mBinding.layoutRestaurant.recycleView.apply {
+            this.layoutManager = LinearLayoutManager(context)
+            this.adapter = adapter
+        }
+
+        viewModel.getAllRestaurants()
 
         viewModel.restaurantsLiveData.observe(this, Observer {
             adapter.addAll(it)
         })
-
 
         if (viewModel.restaurantsLiveData.value != null) {
             adapter.addAll(viewModel.restaurantsLiveData.value)

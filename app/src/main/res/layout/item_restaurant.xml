@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:background="@android:color/transparent"
         android:orientation="horizontal">
 
@@ -30,6 +30,14 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:scaleType="fitXY" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:button="@drawable/ic_state_fav_unfav"
+                android:checked="@{restaurant.favourite}" />
 
         </androidx.cardview.widget.CardView>
 
@@ -57,6 +65,7 @@
                     android:textColor="@android:color/black"
                     tools:text="Restaurant Name" />
 
+
                 <androidx.appcompat.widget.AppCompatTextView
                     rating="@{restaurant.ratingData}"
                     android:layout_width="wrap_content"
@@ -82,13 +91,13 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="@{restaurant.address.value}"
-                    tools:text="Restaurant Name" />
+                    tools:text="Restaurant Address" />
+
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginEnd="10dp"
                     android:text="@{String.format(@string/price_per_person,restaurant.currency,restaurant.avgPrice)}"
                     android:textColor="#3A3A3A"

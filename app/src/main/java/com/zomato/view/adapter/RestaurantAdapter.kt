@@ -16,7 +16,10 @@ import com.zomato.model.RestaurantData
 import com.zomato.view.ItemClickListener
 import kotlinx.android.synthetic.main.item_cuisine.view.*
 
-class RestaurantAdapter constructor(private val listener: ItemClickListener<ListItem>) :
+class RestaurantAdapter constructor(
+    private val enableFavourite: Boolean = false,
+    private val listener: ItemClickListener<ListItem>? = null
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val items: MutableList<ListItem> = mutableListOf()
@@ -54,9 +57,10 @@ class RestaurantAdapter constructor(private val listener: ItemClickListener<List
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         if (holder is CuisineHolder) {
-            holder.itemView.tvCuisine.text = (items[position] as Cuisine).name
+            holder.bind(items[position])
         } else if (holder is RestaurantHolder) {
             holder.bind(items[position], listener)
+            holder.mBinding.checkbox.isEnabled = enableFavourite
         }
     }
 
@@ -71,19 +75,22 @@ class RestaurantAdapter constructor(private val listener: ItemClickListener<List
         notifyDataSetChanged()
     }
 
-    class RestaurantHolder(val mBinding: ItemRestaurantBinding) :
+    inner class RestaurantHolder(val mBinding: ItemRestaurantBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
 
-        fun bind(item: ListItem, listener: ItemClickListener<ListItem>) {
-            mBinding.restaurant = item as Restaurant
-            mBinding.root.setOnClickListener {
-                listener.onItemClick(item)
+        fun bind(item: ListItem, listener: ItemClickListener<ListItem>?) {
+            mBinding.restaurant = (item as RestaurantData).restaurant
+            mBinding.checkbox.setOnCheckedChangeListener { _, b ->
+                item.restaurant.isFavourite = b
+                listener?.markFavourite(item, b)
             }
         }
     }
 
-    class CuisineHolder(mBinding: ItemCuisineBinding) :
+    inner class CuisineHolder(val mBinding: ItemCuisineBinding) :
         RecyclerView.ViewHolder(mBinding.root) {
-
+        fun bind(item: ListItem) {
+            mBinding.root.tvCuisine.text = (item as Cuisine).name
+        }
     }
 }

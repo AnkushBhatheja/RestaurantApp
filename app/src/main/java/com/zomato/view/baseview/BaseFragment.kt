@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.zomato.view.ProgressDialog
 import com.zomato.viewmodel.BaseViewModel
+import kotlinx.android.synthetic.main.fragment_fav_restaurant.*
 
 abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel> : AppCompatDialogFragment() {
 
@@ -36,6 +38,11 @@ abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel> : AppCompatDial
         inject()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +53,6 @@ abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel> : AppCompatDial
             container, false
         )
         mBinding.lifecycleOwner = this
-
         return mBinding.root
     }
 
@@ -104,4 +110,5 @@ abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel> : AppCompatDial
         hideLoader()
         mProgressDialog = null
     }
+
 }

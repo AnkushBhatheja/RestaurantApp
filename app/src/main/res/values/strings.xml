@@ -5,4 +5,7 @@
     <string name="submit">Submit</string>
     <string name="enter">Enter here…</string>
     <string name="price_per_person">%1$s%2$d for two</string>
+    <string name="favourite_restaurants">Favourite Restaurants</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="faourites">Faourites</string>
 </resources>
