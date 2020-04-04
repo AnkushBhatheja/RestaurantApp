@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.zomato.viewmodel.FavRestaurantsViewModel" />
+            type="com.zomato.viewmodel.RestaurantsViewModel" />
     </data>
 
 

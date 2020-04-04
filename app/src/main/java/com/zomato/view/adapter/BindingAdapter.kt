@@ -20,8 +20,8 @@ object BindingAdapter {
     @BindingAdapter("imageUrl")
     fun imageUrl(view: ImageView, url: String?) {
         if (!TextUtils.isEmpty(url)) {
-            Glide.with(view.context).load(url).error(R.mipmap.ic_launcher)
-                .placeholder(R.mipmap.ic_launcher).into(view)
+            Glide.with(view.context).load(url).error(R.drawable.no_image)
+                .placeholder(R.drawable.no_image).into(view)
         } else {
             view.setImageResource(R.drawable.no_image)
         }

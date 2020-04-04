@@ -1,7 +1,7 @@
 package com.zomato.di
 
 import com.google.gson.Gson
-import com.zomato.ZomatoApiInterceptor
+import com.zomato.HeaderInterceptor
 import com.zomato.repo.RestaurantService
 import dagger.Module
 import dagger.Provides
@@ -34,7 +34,7 @@ object NetworkModule {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient.Builder()
             .addInterceptor(logging)
-            .addInterceptor(ZomatoApiInterceptor())
+            .addInterceptor(HeaderInterceptor())
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)

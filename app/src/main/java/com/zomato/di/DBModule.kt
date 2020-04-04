@@ -1,7 +1,7 @@
 package com.zomato.di
 
 import androidx.room.Room
-import com.zomato.ZomatoApplication
+import com.zomato.RestaurantApplication
 import com.zomato.database.Database
 import com.zomato.database.RestaurantDao
 import dagger.Module
@@ -17,7 +17,7 @@ object DBModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(application: ZomatoApplication): Database {
+    fun provideDatabase(application: RestaurantApplication): Database {
         return Room
             .databaseBuilder(application.applicationContext, Database::class.java, "database.db")
             .fallbackToDestructiveMigration()

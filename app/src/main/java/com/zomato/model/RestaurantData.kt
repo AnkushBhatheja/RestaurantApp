@@ -18,6 +18,7 @@ data class RestaurantData(
     override fun hashCode(): Int {
         return restaurant.hashCode()
     }
+
 }
 
 data class Restaurant(
@@ -35,7 +36,7 @@ data class Restaurant(
 data class Address(@SerializedName("locality_verbose") val value: String)
 
 data class RatingData(
-    @SerializedName("aggregate_rating") val avgRating: Float,
+    @SerializedName("aggregate_rating") val avgRating: Double,
     @SerializedName("rating_color") val color: String,
     @SerializedName("rating_obj") @Embedded val rating: Rating
 )

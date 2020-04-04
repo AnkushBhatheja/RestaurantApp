@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">Zomato Search</string>
+    <string name="app_name">Restaurant Search</string>
     <string name="loading">Loading…</string>
     <string name="search">Search</string>
     <string name="submit">Submit</string>
-    <string name="enter">Enter here…</string>
+    <string name="enter">Search Restaurant here…</string>
     <string name="price_per_person">%1$s%2$d for two</string>
     <string name="favourite_restaurants">Favourite Restaurants</string>
     <string name="restaurants">Restaurants</string>
-    <string name="faourites">Faourites</string>
+    <string name="sort_by_price">Sort by Price</string>
+    <string name="sort_by_rating">Sort by Rating</string>
 </resources>

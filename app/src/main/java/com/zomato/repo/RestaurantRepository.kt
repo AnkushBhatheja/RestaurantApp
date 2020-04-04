@@ -8,9 +8,9 @@ import io.reactivex.Single
 
 interface RestaurantRepository {
 
-    fun fetchFavouriteRestaurants(): Observable<List<RestaurantData>>
+    fun fetchFavouriteRestaurants(): Observable<MutableList<RestaurantData>>
 
-    fun fetchAllRestaurants(query: String?): Single<List<RestaurantData>>
+    fun fetchAllRestaurants(query: String?): Single<MutableList<RestaurantData>>
 
     fun addToFavourite(restaurant: RestaurantData): Single<Unit>
 

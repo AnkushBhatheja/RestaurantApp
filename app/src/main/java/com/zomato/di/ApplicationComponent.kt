@@ -1,6 +1,7 @@
 package com.zomato.di
 
-import com.zomato.ZomatoApplication
+import com.zomato.RestaurantApplication
+import com.zomato.view.MainActivity
 import com.zomato.view.fragment.FavRestaurantListFragment
 import com.zomato.view.fragment.RestaurantListFragment
 import dagger.BindsInstance
@@ -14,7 +15,7 @@ interface ApplicationComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        fun application(application: ZomatoApplication): Builder
+        fun application(application: RestaurantApplication): Builder
 
         fun build(): ApplicationComponent
 
@@ -22,5 +23,6 @@ interface ApplicationComponent {
 
     fun inject(restaurantListFragment: RestaurantListFragment)
     fun inject(favRestaurantListFragment: FavRestaurantListFragment)
+    fun inject(activity: MainActivity)
 
 }

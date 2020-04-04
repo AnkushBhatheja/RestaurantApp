@@ -23,21 +23,21 @@ class RestaurantRepositoryImpl @Inject constructor(
     private val restaurantDao: RestaurantDao
 ) : RestaurantRepository {
 
-    override fun fetchFavouriteRestaurants(): Observable<List<RestaurantData>> {
+    override fun fetchFavouriteRestaurants(): Observable<MutableList<RestaurantData>> {
         return restaurantDao.getFavouriteRestaurant()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun fetchAllRestaurants(query: String?): Single<List<RestaurantData>> {
+    override fun fetchAllRestaurants(query: String?): Single<MutableList<RestaurantData>> {
 
         return Single.zip(
             restaurantService.fetchRestaurants(query)
                 .map { it.restaurants }.subscribeOn(Schedulers.io()),
             fetchFavouriteRestaurants().elementAt(0, mutableListOf()),
-            BiFunction<List<RestaurantData>,
+            BiFunction<MutableList<RestaurantData>,
                     List<RestaurantData>,
-                    List<RestaurantData>>
+                    MutableList<RestaurantData>>
             { all, fav ->
                 for (item1 in all) {
                     if (fav.contains(item1))

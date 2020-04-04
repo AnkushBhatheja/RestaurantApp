@@ -4,7 +4,7 @@ import android.app.Application
 import com.zomato.di.ApplicationComponent
 import com.zomato.di.DaggerApplicationComponent
 
-class ZomatoApplication : Application() {
+class RestaurantApplication : Application() {
 
     lateinit var appComponent: ApplicationComponent
 

@@ -1,17 +1,13 @@
 package com.zomato.view.fragment
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zomato.R
-import com.zomato.ZomatoApplication
+import com.zomato.RestaurantApplication
 import com.zomato.database.ListItem
 import com.zomato.databinding.FragmentRestaurantBinding
-import com.zomato.model.Restaurant
 import com.zomato.model.RestaurantData
 import com.zomato.view.ItemClickListener
 import com.zomato.view.adapter.RestaurantAdapter
@@ -32,13 +28,15 @@ class RestaurantListFragment : BaseFragment<FragmentRestaurantBinding, Restauran
     }
 
     override fun inject() {
-        (activity?.application as ZomatoApplication).appComponent
+        (activity?.application as RestaurantApplication).appComponent
             .inject(this)
     }
 
     override fun createViewModel(): RestaurantsViewModel {
-        return ViewModelProvider(this, viewModelFactory)
-            .get(RestaurantsViewModel::class.java)
+        return activity?.viewModelStore?.let {
+            ViewModelProvider(it, viewModelFactory)
+                .get(RestaurantsViewModel::class.java)
+        }!!
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -61,12 +59,18 @@ class RestaurantListFragment : BaseFragment<FragmentRestaurantBinding, Restauran
 
         viewModel.getAllRestaurants()
 
-        viewModel.restaurantsLiveData.observe(this, Observer {
-            adapter.addAll(it)
+        viewModel.sortEvent.observe(this, Observer {
+            viewModel.restaurantsLiveData.value =
+                viewModel.sortRestaurant(viewModel.restaurantsLiveData.value)
         })
 
+        viewModel.restaurantsLiveData.observe(this, Observer {
+            adapter.addAll(viewModel.getDataToDisplay(it))
+        })
+
+
         if (viewModel.restaurantsLiveData.value != null) {
-            adapter.addAll(viewModel.restaurantsLiveData.value)
+            adapter.addAll(viewModel.getDataToDisplay(viewModel.restaurantsLiveData.value))
         } else
             viewModel.search(viewModel.searchKey.value!!)
 

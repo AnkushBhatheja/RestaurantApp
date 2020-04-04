@@ -1,24 +1,21 @@
 package com.zomato.view.fragment
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zomato.R
-import com.zomato.ZomatoApplication
+import com.zomato.RestaurantApplication
 import com.zomato.databinding.FragmentFavRestaurantBinding
 import com.zomato.view.adapter.RestaurantAdapter
 import com.zomato.view.baseview.BaseFragment
-import com.zomato.viewmodel.FavRestaurantsViewModel
+import com.zomato.viewmodel.RestaurantsViewModel
 import com.zomato.viewmodel.ViewModelFactory
 import javax.inject.Inject
 
 
 class FavRestaurantListFragment :
-    BaseFragment<FragmentFavRestaurantBinding, FavRestaurantsViewModel>() {
+    BaseFragment<FragmentFavRestaurantBinding, RestaurantsViewModel>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -28,18 +25,18 @@ class FavRestaurantListFragment :
     }
 
     override fun inject() {
-        (activity?.application as ZomatoApplication).appComponent
+        (activity?.application as RestaurantApplication).appComponent
             .inject(this)
     }
 
-    override fun createViewModel(): FavRestaurantsViewModel {
-        return ViewModelProvider(this, viewModelFactory)
-            .get(FavRestaurantsViewModel::class.java)
+    override fun createViewModel(): RestaurantsViewModel {
+        return activity?.viewModelStore?.let {
+            ViewModelProvider(it, viewModelFactory)
+                .get(RestaurantsViewModel::class.java)
+        }!!
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-
-        activity?.actionBar?.title = getString(R.string.favourite_restaurants)
 
         mBinding.viewModel = viewModel
         mBinding.layoutRestaurant.recycleView.layoutManager = LinearLayoutManager(context)
@@ -47,13 +44,17 @@ class FavRestaurantListFragment :
         val adapter = RestaurantAdapter()
         mBinding.layoutRestaurant.recycleView.adapter = adapter
 
+        viewModel.sortEvent.observe(this, Observer {
+            viewModel.favouriteRestaurants.value =
+                viewModel.sortRestaurant(viewModel.favouriteRestaurants.value)
+        })
 
         viewModel.favouriteRestaurants.observe(this, Observer {
-            adapter.addAll(it)
+            adapter.addAll(viewModel.getDataToDisplay(it))
         })
 
         if (viewModel.favouriteRestaurants.value != null) {
-            adapter.addAll(viewModel.favouriteRestaurants.value)
+            adapter.addAll(viewModel.getDataToDisplay(viewModel.favouriteRestaurants.value))
         } else
             viewModel.fetchFavouriteRestaurants()
     }

@@ -16,5 +16,5 @@ interface RestaurantDao {
     fun deleteFromFavourite(restaurantData: RestaurantData): Single<Unit>
 
     @Query("select * from RestaurantData")
-    fun getFavouriteRestaurant(): Observable<List<RestaurantData>>
+    fun getFavouriteRestaurant(): Observable<MutableList<RestaurantData>>
 }

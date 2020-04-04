@@ -31,13 +31,15 @@
                 android:layout_height="80dp"
                 android:scaleType="fitXY" />
 
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:button="@drawable/ic_state_fav_unfav"
-                android:checked="@{restaurant.favourite}" />
+
+            <!--            <androidx.appcompat.widget.AppCompatCheckBox-->
+            <!--                android:id="@+id/checkbox"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_margin="4dp"-->
+            <!--                android:button="@drawable/ic_state_fav_unfav"-->
+            <!--                android:checked="@{restaurant.favourite}" />-->
+
 
         </androidx.cardview.widget.CardView>
 
@@ -49,15 +51,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="2"
@@ -66,17 +68,16 @@
                     tools:text="Restaurant Name" />
 
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    rating="@{restaurant.ratingData}"
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rating_border"
-                    android:paddingStart="6dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="6dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="@android:color/white"
-                    tools:text="3.3" />
+                    android:layout_margin="4dp"
+                    android:button="@drawable/ic_state_fav_unfav"
+                    android:checked="@{restaurant.favourite}"
+                    android:gravity="center" />
+
+
             </LinearLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -93,15 +94,35 @@
                     android:text="@{restaurant.address.value}"
                     tools:text="Restaurant Address" />
 
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:text="@{String.format(@string/price_per_person,restaurant.currency,restaurant.avgPrice)}"
-                    android:textColor="#3A3A3A"
-                    tools:text="$100 per person" />
+                    android:layout_marginEnd="10dp">
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@{String.format(@string/price_per_person,restaurant.currency,restaurant.avgPrice)}"
+                        android:textColor="#3A3A3A"
+                        tools:text="$100 per person" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        rating="@{restaurant.ratingData}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rating_border"
+                        android:paddingStart="5dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="5dp"
+                        android:paddingBottom="4dp"
+                        android:textColor="@android:color/white"
+                        tools:text="3.3" />
+                </LinearLayout>
+
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
