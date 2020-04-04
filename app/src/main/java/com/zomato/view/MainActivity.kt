@@ -5,6 +5,7 @@ import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -39,15 +40,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(RestaurantsViewModel::class.java)
 
-
         mBinding.pager.apply {
             this.adapter = RestaurantPagerAdapter(supportFragmentManager)
         }
         mBinding.tabLayout.setupWithViewPager(mBinding.pager)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_sort, menu);
+
+        when (viewModel.sortEvent.value) {
+            SortEvent.PRICE -> menu?.getItem(0)?.isChecked = true
+            SortEvent.RATING -> menu?.getItem(1)?.isChecked = true
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -64,9 +71,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     class RestaurantPagerAdapter(fm: FragmentManager) :
         FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-        private val registeredFragments = SparseArray<Fragment>()
-
-
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 1 -> FavRestaurantListFragment()
@@ -79,24 +83,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         override fun getPageTitle(position: Int): CharSequence? {
             return if (position == 1) "Favourite" else "All"
         }
-
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val fragment = super.instantiateItem(container, position) as Fragment
-            registeredFragments.put(position, fragment)
-            return fragment
-        }
-
-
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-            registeredFragments.remove(position)
-            super.destroyItem(container, position, `object`)
-        }
-
-        // Returns the fragment for the position (if instantiated)
-        fun getRegisteredFragment(position: Int): Fragment? {
-            return registeredFragments[position]
-        }
-
 
     }
 
