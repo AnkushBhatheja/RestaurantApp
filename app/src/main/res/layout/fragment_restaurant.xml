@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="true"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:hint="@string/enter"
             android:onTextChanged="@{(text, start, before, count)->viewModel.search(text.toString())}"
             android:text="@={viewModel.searchKey}" />
